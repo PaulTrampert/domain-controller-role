@@ -1,38 +1,44 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Sets up a Samba4 based active directory domain controller.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Python3
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- `hostname`: The hostname to use for the machine.
+- `ad_realm`: The fully qualified realm for the domain (e.g. `some.sample.com`)
+- `ad_domain`: The NETBios name for the domain (e.g. `SAMPLE`)
+- `ad_admin_pass`: The password for the domain administrator.
+- `ad_dc_ip`: The static IP address for the domain controller. Defaults to `ansible_default_ipv4.address`.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yml
+---
+- hosts: all
+  become: yes
+  vars:
+    hostname: dc01
+    ad_realm: home.ptrampert.com
+    ad_domain: PTRAMPERT
+    ad_admin_pass: Asdfasdf1
+  roles:
+    - domain-controller-role
+```
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+https://github.com/PaulTrampert
