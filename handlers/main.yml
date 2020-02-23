@@ -1,0 +1,5 @@
+---
+- name: Restart Domain Controller
+  service:
+    name: samba-ad-dc
+    state: restarted

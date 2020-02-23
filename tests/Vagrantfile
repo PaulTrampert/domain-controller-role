@@ -1,0 +1,9 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-18.04"
+
+  config.vm.provision "ansible", run: "always" do |ansible|
+    ansible.playbook = "test.yml"
+    ansible.galaxy_role_file = "requirements.yml"
+    ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
+  end
+end

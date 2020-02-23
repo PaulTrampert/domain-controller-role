@@ -1,0 +1,34 @@
+---
+- name: Ensure samba-ad-dc is not running
+  service:
+    name: samba-ad-dc
+    state: stopped
+    enabled: no
+
+- name: Ensure smbd is not running
+  service:
+    name: smbd
+    state: stopped
+    enabled: no
+
+- name: Ensure nmbd is not running
+  service:
+    name: nmbd
+    state: stopped
+    enabled: no
+
+- name: Ensure winbind is not running
+  service:
+    name: winbind
+    state: stopped
+    enabled: no
+
+- name: Delete default smb.conf
+  file:
+    path: /etc/samba/smb.conf
+    state: absent
+
+- name: Provision Domain
+  shell:
+    cmd: samba-tool domain provision --server-role=dc --use-rfc2307 --dns-backend=SAMBA_INTERNAL --realm={{ad_realm}} --domain={{ad_domain}} --adminpass={{ad_admin_pass}}
+    creates: /var/lib/samba/private/krb5.conf

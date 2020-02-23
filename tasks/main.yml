@@ -1,0 +1,84 @@
+---
+- name: Set hosts file
+  template:
+    src: hosts
+    dest: /etc/hosts
+
+- name: Install software
+  apt:
+    name:
+      - acl
+      - attr
+      - samba
+      - samba-dsdb-modules
+      - samba-vfs-modules
+      - winbind
+      - libpam-winbind
+      - libnss-winbind
+      - libpam-krb5
+      - krb5-config
+      - krb5-user
+      - dnsutils
+
+- name: Check if domain is provisioned
+  stat:
+    path: /var/lib/samba/private/krb5.conf
+  register: domain_provisioned
+
+- name: Provision Domain
+  include: provision_domain.yml
+  when: not domain_provisioned.stat.exists
+
+- name: Setup DNS Forwarder
+  notify: Restart Domain Controller
+  lineinfile:
+    path: /etc/samba/smb.conf
+    regexp: dns\s+forwarder\s*=\s*\d+\.\d+\.\d+\.\d+
+    line: dns forwarder = 8.8.8.8
+
+- name: Configure dns resolution
+  template:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+
+- name: Configure Kerberos
+  copy:
+    remote_src: yes
+    src: /var/lib/samba/private/krb5.conf
+    dest: /etc/krb5.conf
+    mode: u=rw,g=r,o=r
+
+- name: Mask systemd-resolved
+  systemd:
+    name: systemd-resolved
+    masked: yes
+    enabled: no
+    state: stopped
+
+- name: Mask smbd
+  systemd:
+    name: smbd
+    masked: yes
+    enabled: no
+    state: stopped
+
+- name: Mask nmbd
+  systemd:
+    name: nmbd
+    masked: yes
+    enabled: no
+    state: stopped
+
+- name: Mask winbind
+  systemd:
+    name: winbind
+    masked: yes
+    enabled: no
+    state: stopped
+
+- name: Ensure samba-ad-dc is running
+  systemd:
+    name: samba-ad-dc
+    masked: no
+    enabled: yes
+    state: started
