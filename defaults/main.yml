@@ -1,3 +1,4 @@
 ---
 hostname: dc01
 ad_dc_ip: "{{ansible_default_ipv4.address}}"
+ad_dc_subnet: "192.168.1.0/24"

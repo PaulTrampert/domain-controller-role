@@ -3,9 +3,17 @@
   become: yes
   vars:
     hostname: dc01
+  tags:
+    - init
+  roles:
+    - ubuntu_base
+
+- hosts: all
+  become: yes
+  vars:
+    hostname: dc01
     ad_realm: home.ptrampert.com
     ad_domain: PTRAMPERT
     ad_admin_pass: Asdfasdf1
   roles:
-    - ubuntu_base
     - ../../.

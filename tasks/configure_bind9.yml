@@ -1,0 +1,40 @@
+---
+- name: Set bind9 options
+  notify: Restart bind9
+  lineinfile:
+    path: /etc/default/bind9
+    regex: OPTIONS="[^"]*"
+    line: OPTIONS="-u bind -4"
+
+- name: Set named.conf.options
+  notify: Restart bind9
+  template:
+    src: named.conf.options
+    dest: /etc/bind/named.conf.options
+
+- name: Update named.conf.local
+  notify: Restart bind9
+  template:
+    src: named.conf.local
+    dest: /etc/bind/named.conf.local
+
+- name: Update named.conf
+  notify: Restart bind9
+  template:
+    src: named.conf
+    dest: /etc/bind/named.conf
+
+- name: Update apparmor rules
+  notify: Restart apparmor
+  lineinfile:
+    path: /etc/apparmor.d/usr.sbin.named
+    insertbefore: \}
+    line: "{{item}}"
+  with_items:
+    - /usr/lib/x86_64-linux-gnu/ldb/** rwmk,
+    - /usr/lib/x86_64-linux-gnu/samba/** rwmk,
+    - /var/lib/samba/private/dns/** rwmk,
+    - /var/lib/samba/private/named.conf r,
+    - /var/lib/samba/private/dns.keytab r,
+    - /var/tmp/* rw,
+    - /dev/urandom rw,

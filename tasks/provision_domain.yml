@@ -30,5 +30,5 @@
 
 - name: Provision Domain
   shell:
-    cmd: samba-tool domain provision --server-role=dc --use-rfc2307 --dns-backend=SAMBA_INTERNAL --realm={{ad_realm}} --domain={{ad_domain}} --adminpass={{ad_admin_pass}}
+    cmd: samba-tool domain provision --server-role=dc --use-rfc2307 --dns-backend=BIND9_DLZ --realm={{ad_realm}} --domain={{ad_domain}} --adminpass={{ad_admin_pass}}
     creates: /var/lib/samba/private/krb5.conf

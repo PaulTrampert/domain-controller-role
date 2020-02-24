@@ -20,6 +20,8 @@
       - krb5-user
       - dnsutils
       - chrony
+      - bind9
+      - bind9utils
 
 - name: Ensure chronyd is running
   service:
@@ -34,6 +36,9 @@
 - name: Provision Domain
   include: provision_domain.yml
   when: not domain_provisioned.stat.exists
+
+- name: Configure bind9
+  include: configure_bind9.yml
 
 - name: Setup DNS Forwarder
   notify: Restart Domain Controller

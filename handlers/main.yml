@@ -3,3 +3,16 @@
   service:
     name: samba-ad-dc
     state: restarted
+
+- name: Restart bind9
+  service:
+    name: bind9
+    state: restarted
+    enabled: yes
+
+- name: Restart apparmor
+  notify: Restart bind9
+  service:
+    name: apparmor
+    state: restarted
+    enabled: yes
