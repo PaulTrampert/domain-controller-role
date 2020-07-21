@@ -2,7 +2,7 @@
 - name: Set bind9 options
   notify: Restart bind9
   lineinfile:
-    path: /etc/default/bind9
+    path: /etc/default/named
     regex: OPTIONS="[^"]*"
     line: OPTIONS="-u bind -4"
 
