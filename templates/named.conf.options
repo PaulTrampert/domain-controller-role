@@ -59,6 +59,6 @@ options {
       // Before Samba 4.9.0
       // tkey-gssapi-keytab "/var/lib/samba/private/dns.keytab";
       // From Samba 4.9.0 ( You will need to run samba_dnsupgrade if upgrading your Samba version. )
-      tkey-gssapi-keytab "/var/lib/samba/private/dns.keytab";
+      tkey-gssapi-keytab "/var/lib/samba/bind-dns/dns.keytab";
 
   };

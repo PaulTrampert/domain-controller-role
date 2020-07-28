@@ -21,7 +21,7 @@
       - dnsutils
       - chrony
       - bind9
-      - bind9utils
+      - bind9-utils
 
 - name: Ensure chronyd is running
   service:

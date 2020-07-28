@@ -24,6 +24,12 @@
     src: named.conf
     dest: /etc/bind/named.conf
 
+- name: Update samba's named.conf
+  notify: Restart bind9
+  copy:
+    src: dlz.named.conf
+    dest: /var/lib/samba/bind-dns/named.conf
+
 - name: Update apparmor rules
   notify: Restart apparmor
   lineinfile:
@@ -33,8 +39,8 @@
   with_items:
     - /usr/lib/x86_64-linux-gnu/ldb/** rwmk,
     - /usr/lib/x86_64-linux-gnu/samba/** rwmk,
-    - /var/lib/samba/private/dns/** rwmk,
-    - /var/lib/samba/private/named.conf r,
-    - /var/lib/samba/private/dns.keytab rk,
+    - /var/lib/samba/bind-dns/** rwmk,
+    - /var/lib/samba/bind-dns/named.conf r,
+    - /var/lib/samba/bind-dns/dns.keytab rk,
     - /var/tmp/* rw,
     - /dev/urandom rw,

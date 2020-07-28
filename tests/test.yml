@@ -12,7 +12,7 @@
   become: yes
   vars:
     hostname: dc01
-    ad_realm: home.ptrampert.com
+    ad_realm: test.ptrampert.com
     ad_domain: PTRAMPERT
     ad_admin_pass: Asdfasdf1
   roles:
